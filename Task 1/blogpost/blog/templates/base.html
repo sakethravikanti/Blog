@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paginated Posts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        .blog-container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .blog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .blog-title {
+            font-size: 1.5em;
+            color: #333;
+            margin: 0;
+        }
+        .blog-author {
+            font-size: 0.9em;
+            color: #777;
+        }
+        .blog-content {
+            font-size: 1em;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .blog-actions {
+            text-align: right;
+        }
+        .blog-actions a {
+            text-decoration: none;
+            color: #4CAF50;
+            margin: 0 10px;
+        }
+        .blog-actions a:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            color: #333;
+            background-color: #fff;
+            border-radius: 4px;
+        }
+        .pagination a.active {
+            background-color: #333;
+            color: #fff;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .add-post-button {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .add-post-button button {
+            width: 150px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .add-post-button button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="{% url 'display' %}">Home</a>
+        <a href="/admin">Admin</a>
+    </nav>
+
+    {% for post in page_obj %}
+    
+    <div class="blog-container">
+        <div class="blog-header">
+            <h2 class="blog-title">{{ post.title }}</h2>
+            <p class="blog-author">by {{ post.author }}</p>
+        </div>
+        <p class="blog-content">{{ post.content }}</p>
+        <div class="blog-actions">
+            <a href="{% url 'edit' post.id %}">Edit</a>
+            <a href="{% url 'delete' post.id %}">Delete</a>
+        </div>
+    </div>
+
+    {% endfor %}
+
+    <div class="pagination">
+        {% for num in page_obj.paginator.page_range %}
+        <a href="?page={{ num }}" class="{% if page_obj.number == num %}active{% endif %}">
+            {{ num }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <div class="add-post-button">
+        <a href="{% url 'add' %}">
+            <button>Add Post</button>
+        </a>
+    </div>
+
+</body>
+</html>
